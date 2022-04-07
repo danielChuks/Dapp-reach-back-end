@@ -1,6 +1,31 @@
 'reach 0.1';
 
+const [isCards, WITCH, GHOST, MOUSE, PAWN] = makeEnum(4);
+
+const [isResults, KLAUS_WIN, DRAW, ELENA_WIN] = makeEnum(3);
+
+const winner = (cardsKlaus, cardsElena) => 
+  ((cardsKlaus + (4 - cardsElena)) % 3 );
+
+assert(winner(GHOST, WITCH) == ELENA_WIN);
+assert(winner(WITCH, GHOST) == KLAUS_WIN);
+assert(winner(GHOST, MOUSE) == ELENA_WIN);
+assert(winner(MOUSE, GHOST) == KLAUS_WIN);
+assert(winner(GHOST, PAWN)  == ELENA_WIN);
+assert(winner(PAWN,  GHOST) == KLAUS_WIN);
+assert(winner(GHOST, GHOST) == DRAW);
+
+forall(UInt, cardsKlaus =>
+  forall(UInt, cardsElena =>
+    (assert(isResults(winner(cardsKlaus, cardsElena))))));
+
+
+forall(UInt, (cards) => assert(winner(cards, cards)== DRAW))
+
+// the are trying to specify that each users have access to random number.
+// the ...hasRandom is used to generate random numbers to protect the hand of the first player which is Klaus.
 const Player = {
+  ...hasRandom,
   getCard: Fun([], UInt),
   viewResult: Fun([UInt], Null),
 }
@@ -22,7 +47,7 @@ Klaus.only(() => {
   });
 
   //pubilsing the wager and the card klaus picks
-Klaus.publish(wager, cardsKlaus)
+Klaus.publish(wager)
 .pay(wager)
   commit();
 
@@ -33,7 +58,10 @@ Elena.only(() => {
   interact.acceptWager(wager)
     const cardsElena = declassify(interact.getCard())
     
-})
+});
+
+Klaus.publish(cardsKlaus);
+commit();
   Elena.publish(cardsElena)
   .pay(wager);
       const result = (cardsKlaus + (4 - cardsElena)) % 3;

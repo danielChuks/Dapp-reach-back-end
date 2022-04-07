@@ -29,6 +29,7 @@ const CARDS = ['mouse', 'witch', 'ghost', 'pawn']
 const RESULT = ['Elena wins', 'Draw', 'Klaus wins'];
 
 const Player = (who) => ({
+  ...stdlib.hasRandom,
   getCard: () => {
     const cards = Math.floor(Math.random() * 3);
     console.log(`${who} picked ${CARDS[cards]}`)
