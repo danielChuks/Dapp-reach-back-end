@@ -26,7 +26,7 @@ const ctcElena = accElena.contract(backend, ctcKlaus.getInfo());
 
 const CARDS = ['mouse', 'witch', 'ghost', 'pawn']
 
-const RESULT = ['Elena wins', 'Draw', 'Klaus wins'];
+const RESULT = ['Klaus wins', 'Draw', 'Elena wins'];
 
 const Player = (who) => ({
   ...stdlib.hasRandom,
@@ -39,7 +39,6 @@ const Player = (who) => ({
     console.log(`${who} saw outcome ${RESULT[result]}`);
   }
 })
-
 
 console.log('Initializing Application Backend');
 
