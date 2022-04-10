@@ -30,7 +30,7 @@ assert(winner(PAWN,  WITCH) == DRAW);
 assert(winner(GHOST, GHOST) == DRAW);
 
 
-// the ...hasRandom is used to generate random numbers to protect the card of the first player which is Klaus.
+//The ...hasRandom is used to generate random numbers to protect the card of the first player which is Klaus.
 const Player = {
   ...hasRandom,
   getCard: Fun([], UInt),
