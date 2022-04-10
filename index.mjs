@@ -23,8 +23,7 @@ const beforeElena = await getBalance(accElena);
 const ctcKlaus = accKlaus.contract(backend);
 const ctcElena = accElena.contract(backend, ctcKlaus.getInfo());
 
-
-const CARDS = ['mouse', 'witch', 'ghost', 'pawn']
+const CARDS = ['ghost','mouse', 'witch', 'pawn']
 
 const RESULT = ['Klaus wins', 'Draw', 'Elena wins'];
 
@@ -37,6 +36,9 @@ const Player = (who) => ({
   },
   viewResult: (result) =>{
     console.log(`${who} saw outcome ${RESULT[result]}`);
+  },
+  informTimeOut: () => {
+    console.log(`${who} observed a timeout`);
   }
 })
 
@@ -45,13 +47,22 @@ console.log('Initializing Application Backend');
 await Promise.all([
     backend.Klaus(ctcKlaus,{
       ...Player('Klaus'),
-      wager: stdlib.parseCurrency(10)
+      wager: stdlib.parseCurrency(10),
+      //here klaus included a deadline of 10 block 
+      deadline: 5
     }),
   
   backend.Elena(ctcElena,{
     ...Player('Elena'),
-    acceptWager: (amt) => {
-      console.log(`Elena accept the wager of ${fmt(amt)}.`)
+    acceptWager: async (amt) => {
+      if(Math.random() <= 0.5 ){
+        for(let i = 0; i < 5; i ++){
+          console.log(`Elena is takng her time`);
+          await stdlib.wait(1);
+        } 
+      }else{
+        console.log(`Elena accept the wager of ${fmt(amt)}.`)
+      }
     }
     
   }),
