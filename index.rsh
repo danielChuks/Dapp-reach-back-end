@@ -4,21 +4,35 @@ const [isCards, GHOST, WITCH, MOUSE, PAWN] = makeEnum(4);
 
 const [isResults, KLAUS_WIN, DRAW, ELENA_WIN] = makeEnum(3);
 
-const winner = (cardsKlaus, cardsElena) => 
-  ((cardsKlaus + (4 - cardsElena)) % 3 );
+// const winner = (cardsKlaus, cardsElena) => 
+//   ((cardsKlaus + (4 - cardsElena)) % 3);
   
+
+const winner = (cardsKlaus, cardsElena) =>{
+  if(cardsKlaus === GHOST && cardsElena === GHOST){
+    return DRAW; // which is 1
+  }
+  else if(cardsKlaus === GHOST){
+    return KLAUS_WIN //which is 0
+
+  }else if (cardsElena === GHOST){
+    return ELENA_WIN; //which is 2
+
+  }else{
+    return DRAW; // which is 1
+  }
+}
+
 assert(winner(GHOST, WITCH) == KLAUS_WIN);
 assert(winner(WITCH, GHOST) == ELENA_WIN);
-// assert(winner(GHOST, PAWN) == ELENA_WIN);
-// assert(winner(MOUSE, PAWN) == KLAUS_WIN);
-// assert(winner(MOUSE, WITCH)  == ELENA_WIN);
-// assert(winner(PAWN,  WITCH) == KLAUS_WIN);
+assert(winner(GHOST, PAWN) == KLAUS_WIN);
+assert(winner(PAWN, GHOST) == ELENA_WIN);
+assert(winner(MOUSE, PAWN) == DRAW);
+assert(winner(MOUSE, PAWN) == DRAW);
+assert(winner(MOUSE, WITCH) == DRAW);
+assert(winner(PAWN,  WITCH) == DRAW);
 assert(winner(GHOST, GHOST) == DRAW);
 
-forall(UInt, cardsKlaus =>
-  forall(UInt, cardsElena => (assert(isResults(winner(cardsKlaus, cardsElena))))));
-
-forall(UInt, (cards) => assert(winner(cards, cards) == DRAW))
 
 // the ...hasRandom is used to generate random numbers to protect the card of the first player which is Klaus.
 const Player = {
@@ -45,6 +59,7 @@ export const main = Reach.App(() => {
     } )
   }
   
+
 //this line of code stipulate only what klaus would do.
 Klaus.only(() => {
      const wager = declassify(interact.wager)

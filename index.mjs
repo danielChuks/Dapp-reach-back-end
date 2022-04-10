@@ -23,15 +23,21 @@ const beforeElena = await getBalance(accElena);
 const ctcKlaus = accKlaus.contract(backend);
 const ctcElena = accElena.contract(backend, ctcKlaus.getInfo());
 
-const CARDS = ['ghost','mouse', 'witch', 'pawn']
+const CARDS = ['ghost','witch', 'mouse', 'pawn']
 
 const RESULT = ['Klaus wins', 'Draw', 'Elena wins'];
 
 const Player = (who) => ({
   ...stdlib.hasRandom,
-  getCard: () => {
+  getCard: async () => {
     const cards = Math.floor(Math.random() * 3);
     console.log(`${who} picked ${CARDS[cards]}`)
+      if(Math.random() <= 0.01){
+        for(i = 0; i < 5; i++){
+          console.log(`${who} takes his time sending it back....`);
+          await stdlib.wait(1);
+        }
+      }
     return cards
   },
   viewResult: (result) =>{
@@ -55,16 +61,8 @@ await Promise.all([
   backend.Elena(ctcElena,{
     ...Player('Elena'),
     acceptWager: async (amt) => {
-      if(Math.random() <= 0.5 ){
-        for(let i = 0; i < 5; i ++){
-          console.log(`Elena is takng her time`);
-          await stdlib.wait(1);
-        } 
-      }else{
         console.log(`Elena accept the wager of ${fmt(amt)}.`)
-      }
     }
-    
   }),
 ]);
 
