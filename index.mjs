@@ -45,6 +45,9 @@ const Player = (who) => ({
   },
   informTimeOut: () => {
     console.log(`${who} observed a timeout`);
+  },
+  informDraw: () => {
+    console.log(`${who} saw outcome draw. Playing another round to determine winner.`);
   }
 })
 
