@@ -1,19 +1,47 @@
 'reach 0.1';
 
+
+const Player = {
+    getHand: Fun([], Uint),
+    seeOutCome: Fun([Uint], Null)
+}
+
 export const main = Reach.App(() => {
     const A = Participant('Alice', {
-        // Specify Alice's interact interface here
+        ...Player,
+        wager: Uint,
     });
     const B = Participant('Bob', {
-        // Specify Bob's interact interface here
+        ...Player,
+        acceptWager: Fun([Uint], Null )
     });
     init();
-    // The first one to publish deploys the contract
-    A.publish();
+
+//steps made by only Alice or bob we used the only key word to know the steps that are used by each paticipants.....
+    A.only(() => {
+        const handA = declasify(interact.getHand())
+        const wager = declasify(interact.wager);
+    })
+    A.publish(handA, wager)
+    .pay(wager)
     commit();
-    // The second one to publish always attaches
-    B.publish();
+
+  B.only(() => {
+    const handB = declasify(interact.getHand())
+    const acceptWager = declasify(interact.acceptWager());
+  })
+    B.publish(handB, acceptWager);;
+
+    const outcome = (handA + (4 - handB)) % 3;
     commit();
+
+
+    /// WE make sure each paticipant see what the out come in on the contaract
+
+    each([A, b], () => {
+        interact.seeOutCome(outcome);
+    });
+
     // write your program here
     exit();
 });
