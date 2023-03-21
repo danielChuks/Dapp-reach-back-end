@@ -28,7 +28,7 @@ export const main = Reach.App(() => {
 
   B.only(() => {
     const handB = declasify(interact.getHand())
-    const acceptWager = declasify(interact.acceptWager());
+    interact.acceptWager(wager);
   })
     B.publish(handB, acceptWager);;
 
