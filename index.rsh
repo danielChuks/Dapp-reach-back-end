@@ -2,7 +2,7 @@
 
 const Player = {
     getHand: Fun([], UInt),
-    seeOutCome: Fun([UInt], Null),
+    seeOutcome: Fun([UInt], Null),
 };
 
 export const main = Reach.App(() => {
@@ -32,18 +32,18 @@ export const main = Reach.App(() => {
 
     const outcome = (handA + (4 - handB)) % 3;
 
-    const [forA, forB] =
-        outcome == 2 ? [2, 0] : outcome == 0 ? [0, 2] : [1, 1];
+    const [forA, forB] = outcome == 2 ? [2, 0] : outcome == 0 ? [0, 2] : [1, 1];
 
+    //We transfer back the fund to the paticipants when we have a draw
     transfer(forA * wager).to(A);
     transfer(forB * wager).to(B);
     commit();
 
     /// WE make sure each paticipant see what the out come in on the contaract
     each([A, B], () => {
-        interact.seeOutCome(outcome);
+        interact.seeOutcome(outcome);
     });
 
     // write your program here
-   // exit();
+    exit();
 });
